@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Navigator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        input[type="submit"] {
+            background-color: #3273dc;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        input[type="submit"]:hover {
+            background-color: #2767d2;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered">Map Navigator</h1>
+            <form action="/search" method="post">
+                <div class="field">
+                    <label class="label">Start Latitude:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="start_lat" name="start_lat" placeholder="Enter start latitude" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Start Longitude:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="start_lon" name="start_lon" placeholder="Enter start longitude" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">End Latitude:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="end_lat" name="end_lat" placeholder="Enter end latitude" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">End Longitude:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="end_lon" name="end_lon" placeholder="Enter end longitude" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Additional Locations (optional):</label>
+                    <div class="control">
+                        <textarea class="textarea" id="locations" name="locations" rows="4" placeholder="Enter additional locations (lat,lon per line)"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="button is-primary" type="submit" value="Search">
+                    </div>
+                </div>
+            </form>
+            <div id="map"></div>
+        </div>
+    </section>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js

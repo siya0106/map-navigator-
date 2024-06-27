@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .path-info {
+            margin-bottom: 20px;
+        }
+        .path-summary {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered">Navigation Result</h1>
+
+            <!-- Path Summary -->
+            <div class="path-summary">
+                <p>Total Distance: {{ total_distance }} km</p>
+                <p>Path: {{ path_summary }}</p>
+            </div>
+
+
+            <div id="map"></div>
+
+
+            <div class="path-info">
+                <h3 class="subtitle">Detailed Path Information</h3>
+                <table class="table is-bordered is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Start Location</th>
+                            <th>End Location</th>
+                            <th>Distance (km)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for path in path_info %}
+                        <tr>
+                            <td>{{ path.start }}</td>
+                            <td>{{ path.end }}</td>
+                            <td>{{ path.distance | round(3) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+    <script>
+        var map = L.map('map').setView([{{ start_location[0] }}, {{ start_location[1] }}], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Add markers for start and end locations
+        L.marker([{{ start_location[0] }}, {{ start_location[1] }}]).addTo(map)
+            .bindPopup('Start Location').openPopup();
+
+        L.marker([{{ end_location[0] }}, {{ end_location[1] }}]).addTo(map)
+            .bindPopup('End Location').openPopup();
+
+        // Add polyline for the path
+        var polylinePoints = [
+            {% for node in full_path %}
+            [{{ G.nodes[node]['pos'][0] }}, {{ G.nodes[node]['pos'][1] }}],
+            {% endfor %}
+        ];
+
+        var polyline = L.polyline(polylinePoints, { color: 'blue', weight: 2.5 }).addTo(map);
+    </script>
+</body>
+</html>
